@@ -27,50 +27,25 @@ end
 # end
 
 def add_two_numbers(l1, l2)
-  cur1 = l1
-  cur2 = l2
-  hsh1 = {}
-  hsh2 = {}
-  i = 0
-  while cur1
-    hsh1[i] = cur1.val
-    cur1 = cur1.next
-    i += 1
-  end
-  j = 0
-  while cur2
-    hsh2[j] = cur2.val
-    cur2 = cur2.next
-    j += 1
-  end
+  p = l1
+  q = l2
 
-  puts hsh1
-  puts hsh2
-
-  add1 = false
-  l3 = ListNode.new(0)
-  cur3 = l3
-  (0..([hsh1.length, hsh2.length].max - 1)).each do |k|
-    val = (hsh1[k] || 0) + (hsh2[k] || 0) + (add1 ? 1 : 0)
+  carry = 0
+  cur = ListNode.new(0)
+  init_node = cur # pointer to first node
+  while p || q
+    val = (p ? p.val : 0) + (q ? q.val : 0) + carry
     if val < 10
-      l3.next = ListNode.new(val)
-      add1 = false
+      cur.next = ListNode.new(val)
+      carry = 0
     else
-      l3.next = ListNode.new(val % 10)
-      add1 = true
+      cur.next = ListNode.new(val % 10)
+      carry = 1
     end
-    l3 = l3.next
+    cur = cur.next
+    p &&= p.next
+    q &&= q.next
   end
-  l3.next = ListNode.new(1) if add1
-  cur3.next
+  cur.next = ListNode.new(1) if carry == 1
+  init_node.next
 end
-
-# l1 = ListNode.new(8)
-# l1.next = ListNode.new(1)
-# l2 = ListNode.new(0)
-# return add_two_numbers(l1, l2)
-
-# l1 = ListNode.new(1)
-# l2 = ListNode.new(9)
-# l2.next = ListNode.new(9)
-# return add_two_numbers(l1, l2)
