@@ -1,22 +1,20 @@
 # @param {String} s
 # @return {Integer}
 def length_of_longest_substring(s)
-  hsh = {}
-  length = 0
   maxlength = 0
+  temp = [0, 0] # [start_pos, length]
 
-  s.split('').each_with_index do |c, i|
-    if hsh.value? c
-      new_start = hsh.key(c) + 1
-      new_keys = [*new_start..i]
-      length = new_keys.length
-      hsh = Hash[[new_keys, hsh.values_at(*new_keys)].transpose]
+  bytes = s.bytes
+  bytes.each_index do |i|
+    dup_index = bytes[temp.first, temp.last].index(bytes[i])
+    if dup_index
+      maxlength = temp.last if temp.last > maxlength
+
+      temp[0] += dup_index + 1
+      temp[1] -= dup_index
     else
-      length += 1
-      maxlength = length if length > maxlength
+      temp[1] += 1
     end
-    hsh[i] = c
   end
-
-  maxlength
+  temp.last > maxlength ? temp.last : maxlength
 end
