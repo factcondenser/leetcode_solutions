@@ -4,9 +4,9 @@ def length_of_longest_substring(s)
   hsh = {}
   length = 0
   maxlength = 0
-  
+
   s.split('').each_with_index do |c, i|
-    if hsh.has_value? c
+    if hsh.value? c
       new_start = hsh.key(c) + 1
       new_keys = [*new_start..i]
       length = new_keys.length
@@ -17,6 +17,6 @@ def length_of_longest_substring(s)
     end
     hsh[i] = c
   end
-  
+
   maxlength
 end
