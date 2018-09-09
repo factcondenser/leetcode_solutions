@@ -1,28 +1,30 @@
 # @param {String} s
 # @return {String}
 def longest_palindrome(s)
-  return s if s == '' || s.length == 1
+  s_len = s.length
+  return s if s_len == 0 || s_len == 1
+
   result = ''
-  hsh = {}
-  bytes = s.bytes
-  bytes.each_with_index do |b, i|
-    hsh.select {|_k, v| v == b}.each do |pos, _char|
-      left = pos
-      right = i
-      temp = ''
-      while left < right
-        break unless bytes[left] == bytes[right]
-        temp << bytes[left]
-        left += 1
-        right -= 1
-      end
-      next if left < right
-      temp += bytes[left].chr + temp.reverse if left == right
-      temp += temp.reverse if left > right
-      result = temp if temp.length > result.length
+  res_len = 0
+
+  (0..s_len).each do |i|
+    len1 = expand_around_centers(s, i, i)
+    len2 = expand_around_centers(s, i, i + 1)
+    len = [len1, len2].max
+
+    if len > res_len
+      result = s[i - (len - 1)/2, len]
+      res_len = len
     end
-    hsh[i] = b
   end
-  result = bytes.first.chr if result == ''
+
   result
+end
+
+def expand_around_centers(s, l, r)
+  while l >= 0 && r < s.length && s[l] == s[r]
+    l -= 1
+    r += 1
+  end
+  r - l - 1
 end
